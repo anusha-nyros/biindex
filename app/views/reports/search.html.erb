@@ -1,0 +1,84 @@
+<script type="text/javascript" >
+//for selecting all checkboxes
+
+function update_report_id() {         
+     var allVals = [];
+     $('.searched_result :checked').each(function() {
+       allVals.push($(this).val());
+     });
+     $('#report_check').val(allVals);
+  }
+//for selecting individual checkboxes 
+$(function() {
+   $('.searched_result input').click(update_report_id);
+   update_report_id();
+ });
+
+ $(document).ready(function (){
+  
+  $(".check_all_or_none").click(function(){
+  $('.searched_result :checkbox').attr('checked', $( this ).is( ':checked' ) ? true : false );
+  update_report_id();  
+  });
+$(".searched_result :checkbox").click(function() { 
+	//	if $(this).attr('checked', false)
+		$(".check_all_or_none").attr('checked', false);
+	});
+});
+
+ </script>
+
+
+<%= render :partial => "menu" %>
+<% if !@reports.blank? %>
+<%= render :partial => "search_form", locals: {q: @q} %>
+<% end %>
+
+<% if @reports.blank? %>
+	<div class"well">Your Search Generated No Records.&nbsp;&nbsp;&nbsp;
+			<%= link_to 'Reset',reports_path, class: 'btn btn-info' %></div>
+<% else %>
+
+<table class="table table-striped">
+  <tr>
+   
+    <th style="width:5px;"><input type="checkbox" class="check_all_or_none"> </th>      
+    <th><%=sort_link(@q, :reportid, "Report ID")%></th>
+    <th><%=sort_link(@q, :report_name, "Report Name")%></th>
+    <th><%=sort_link(@q,:category,"Category")%></th>
+    <th><%=sort_link(@q,:department, "Department")%></th>
+    <th><%=sort_link(@q,:system,"System")%></th>
+    <th><%=sort_link(@q,:owner,"Owner")%></th>
+    <th><%=sort_link(@q,:last_updated,"Last updated")%></th>
+    <th><%=sort_link(@q,:module, "Module")%></th>
+    <th><%=sort_link(@q,:frequency,"Frequency")%></th>
+    <th><%=sort_link(@q,:status,"Status")%></th>
+    <th><%=sort_link(@q,:usage,"Usage")%></th>
+    <th></th>
+   </tr>
+  
+<% @reports.each do |report| %>
+  <tr> 
+    <td class="searched_result"><input type="checkbox" value= "<%= report.id %>"></td>    
+    <td><%= report.reportid %></td>
+    <td><%= report.report_name %></td>
+    <td><%= report.category %></td>
+    <td><%= report.department %></td>
+    <td><%= report.system %></td>
+    <td><%= report.owner %></td>
+    <td><%= report.last_updated %></td>
+    <td><%= report.module %></td>
+    <td><%= report.frequency %></td>
+    <td><%= report.status %></td>
+    <td><%= report.usage %></td>
+    <td><%= link_to 'Show', report,:class=>"btn btn-mini" %>
+<%= link_to 'Edit', edit_report_path(report) ,:class=>"btn btn-mini btn-primary"%>
+
+
+</td> 
+  </tr> 
+<% end %>
+</table> 
+<%= paginate @reports %>
+
+<%end%>

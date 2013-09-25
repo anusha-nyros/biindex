@@ -1,0 +1,138 @@
+<div class="well">
+<%if @options.kind_of?(Array)%>
+
+<%if @options.include?"module"%>
+<p>
+ <b>Module :</b>
+  <%= @report.module %>
+</p>
+<%end%>
+  <%if @options.include?"category"%>
+<p>
+  <b>Category:</b>
+  <%= @report.category %>
+</p>
+<%end%>
+
+  <%if @options.include?"system"%>
+<p>
+  <b>System:</b>
+  <%= @report.system %>
+</p>
+<%end%>
+  <%if @options.include?"owner"%>
+
+<p>
+  <b>Owner:</b>
+  <%= @report.owner %>
+</p>
+<%end%>
+  <%if @options.include?"frequency"%>
+<p>
+  <b>Frequency :</b>
+  <%= @report.frequency %>
+</p>
+<%end%>
+<%if @options.include?"status"%>
+<p>
+  <b>Status :</b>
+  <%= @report.status %>
+</p>
+<%end%>
+  <%if @options.include?"usage"%>
+<p>
+  <b>Usage :</b>
+  <%= @report.usage %>
+</p>
+<%end%>
+
+<%else%>
+<p>
+  <b>Report Id:</b>
+  <%= @report.reportid %>
+</p>
+
+<p>
+  <b>Report name:</b>
+  <%= @report.report_name %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @report.category %>
+</p>
+
+<p>
+  <b>Department:</b>
+  <%= @report.department %>
+</p>
+
+<p>
+  <b>System:</b>
+  <%= @report.system %>
+</p>
+
+<p>
+  <b>Owner:</b>
+  <%= @report.owner %>
+</p>
+
+<p>
+  <b>Last updated:</b>
+  <%= @report.last_updated %>
+</p>
+<p>
+  <b>Module :</b>
+  <%= @report.module %>
+</p>
+
+<p>
+  <b>Frequency :</b>
+  <%= @report.frequency %>
+</p>
+
+<p>
+  <b>Status :</b>
+  <%= @report.status %>
+</p>
+
+<p>
+  <b>Usage :</b>
+  <%= @report.usage %>
+</p>
+
+<% unless @report.report_notes.blank? %>
+<table class="table ">
+<tr>
+	<h3>Notes</h3>
+</tr>
+
+<tr>
+	<% @report.report_notes.each do |r| %>
+		<td>
+			<%= r.notes %>
+		</td>
+	<%end%>
+<% end %>
+</tr>
+</table>
+
+
+
+<% unless @report.report_attachments.blank? %>
+  <p>
+    <h3>Attachments:</h3>
+  </p>
+  
+  <% @report.report_attachments.each do |a| %>
+ 
+  		<%= link_to a.image_attachment.uploaded_filename, a.image_attachment.url%>
+ 
+  		<br>
+  <% end %>
+  <% end %>
+  <%end%> <!-- if-->
+<br>
+<%= link_to 'Destroy', @report, confirm: 'Are you sure?', method: :delete,:class=>"btn  btn-danger" %>
+<%= link_to 'Back', reports_path,:class=>"btn" %>
+</div>

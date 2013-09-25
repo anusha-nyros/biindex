@@ -1,0 +1,69 @@
+<!--getting reports from report database -->
+<%if @report.kind_of?(Array)%>
+
+<% i = 0 %>  
+     <% if @report.blank? %>
+        <div class="well" style="margin-top:20px;margin-left:10px;">
+          No reports found
+        </div>
+      <% else %>  
+<div id='blockview'>
+        <table class="">
+        <% @report.each do |report| %>
+          <% if i % 4 == 0 %>
+          <tr style="height:230px">
+          <% end %>
+	  <td style="height:200px;width:200px;  word-wrap: break-word; "> 
+	  
+	  <a  class="test1" href="<%= report_path(report,:opts=>@svals, :block_view => "a") %> ">
+ 
+				<div class="mai1" >
+ 
+<div class="hovr">
+	<p class="">
+	 <% if report.report_attachments[0].nil? %>
+		<img src="../assets/reports.png"/>
+       <%else%>
+       		<%= image_tag report.report_attachments[0].image_attachment.url %>
+</a>  
+       <%end%>
+
+<span class="db_nam"><b><%=report.report_name%></b></span>
+</p>
+</div>
+</div>
+</a>
+<br/><br/>
+
+			</td>
+                  <% if i % 4 == 3 %>
+          </tr>
+          <% end %>
+          <% i = i + 1 %>
+        <% end %> 
+        </table>  
+ <% end %> 
+ </div>
+
+	
+<%else%>
+
+<a  class="test1" href="<%= report_path(@report,:opts=>@svals, :block_view => "a") %> ">
+
+<div class="mai1" >
+
+<div class="hovr">
+	<p class="">
+	 <% if @report.report_attachments[0].nil? %>
+		<img src="../assets/reports.png"/>
+       <%else%>
+       		<%= image_tag @report.report_attachments[0].image_attachment.url %>
+</a>  
+       <%end%>
+
+<span class="db_nam"><b><%=@report.report_name%></b></span>
+</p>
+</div>
+</div>
+</a>
+<%end%>

@@ -1,0 +1,79 @@
+<script type="text/javascript">
+  $('document').ready(function(){
+       $('#dp1').datepicker({
+          dateFormat: 'mm/dd/yy'       
+        }); 
+});
+</script>  
+<%= simple_nested_form_for @report,html: {class: 'form-horizontal'} do |f| %>
+  <%= f.error_notification %>
+<fieldset >    
+	 <legend>Reports Form</legend>
+    <table>
+      <tr>
+      <td> <%= f.input :report_name %> </td>
+      <td> <%= f.input :category %>   </td>
+      </tr>
+      <tr>
+       <td><%= f.input :department %></td>
+       <td> <%= f.input :system %> </td> 
+      </tr>
+      <tr>
+      <td><%= f.input :owner %></td>
+      <td> <%= f.input :last_updated,:as => :string , :input_html => {id: 'dp1'}%></td>
+      </tr>
+      <tr>
+
+       <td colspan=2>
+      			<%if controller.action_name=='edit'%>
+       				<%= f.input :reportid %>
+       			<%else%>
+       				<%= f.input :reportid,disabled:true %>
+       			<%end%>
+       </td>
+      </tr>
+
+      <tr>
+       <td colspan=2><%= f.input :module,input_html: {rows: '5', class: 'span8'} %></td>
+      </tr>
+      <tr> 
+       <td colspan=2> <%= f.input :frequency,input_html: {rows: '5', class: 'span8'} %> </td> 
+      </tr>
+      <tr>
+      <td colspan=2><%= f.input :status,input_html: {rows: '5', class: 'span8'} %></td>
+      </tr>
+      <tr>
+      <td colspan=2> <%= f.input :usage,input_html: {rows: '5', class: 'span8'}%></td>
+      </tr>
+
+</table>
+
+
+
+<%= f.fields_for :report_notes do |r|  %>
+
+   
+    <%= r.input :notes,input_html: {rows: '5', class: 'span8'}%>
+    <%= r.link_to_remove "Remove" ,class: "btn btn-primary"%><br><br>
+	
+<%end%>
+ <%= f.link_to_add "Add Notes", :report_notes,class: "btn btn-primary" %>
+  <br> 
+  <br>   
+<%= f.fields_for :report_attachments do |attach|  %>
+
+   <%#= link_to attach.object.image_attachment.uploaded_filename unless !attach.object.image_attachment?%>  
+   
+    <%= attach.input :image_attachment,:label=>"Upload Image"%>
+   
+    <%= attach.link_to_remove "Remove" , :style=>"margin-left:60px;" %><br><br>
+	
+<%end%>
+ <%= f.link_to_add "Add Image", :report_attachments %>
+
+    <div class="form-actions">
+      <%= link_to 'Back', reports_path, class: 'btn btn-mini-primary' %>&nbsp;&nbsp;<%= f.button :submit, class: 'btn btn-primary' %>
+    </div>
+    
+  </fieldset>
+<% end %>

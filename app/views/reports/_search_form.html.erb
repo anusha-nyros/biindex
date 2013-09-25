@@ -1,0 +1,204 @@
+<style>
+.btn1
+{
+	height:10px;
+	line-height:10px;
+}
+.searchbox
+{
+	border-radius:25px !important;
+	width:220px !important;
+}
+.well1
+{
+	height:30px;
+}
+
+</style>
+
+   
+<script type="text/javascript">
+
+       
+        
+$(function(){
+
+$('#datepicker').datepicker({
+
+dateFormat:  'yy/mm/dd'
+}); 
+
+$('.pdf-link').click(function(e){
+
+if($('#report_check1').val() == 'search'){
+          		return true;
+        } 
+else {
+        if(!$('#report_check').val()){
+          alert("Please Select Atleast One Record");
+		return false;
+        } 
+    else {
+  return true;
+      }
+} 
+ });
+
+
+	$("#simple-search").click(function(){
+	
+		$(".simpleform").hide();
+		
+		$("#advanceform").show();
+	});
+
+	$("#advance-search").click(function(){
+	
+		$(".simpleform").show();
+		
+		$("#advanceform").hide();
+	});
+	
+});
+</script>
+
+
+<div class="well well1  simpleform" >
+
+ <%= search_form_for @q,:url => search_reports_path,:html => {class: 'form-horizontal '}  do |f| %>
+<div class="control-group" >
+     
+<%=f.text_field :report_name_or_category_or_department_or_system_or_owner_or_module_or_frequency_or_status_or_usage_cont,:class=>"searchbox" %> <%= f.submit  :class=>"btn btn-success"%> &nbsp; <a href="#" id="simple-search" >Advanced</a> &nbsp; <%= link_to 'Reset',reports_url %> 
+  </div>
+<% end %>
+
+<%= simple_form_for :report,:url => url_for(:action=>'export_to_pdf',:controller=>'reports'), :html => {method: :post,:onsubmit=>"return confirm('Do you want to generate PDF?');", class: 'form-horizontal'}  do |f| %>
+
+<%=f.hidden_field :report_check1 ,:value=>controller.action_name %>
+<%= hidden_field_tag "report_check" %>
+
+<%= image_submit_tag("pdf_icon.png", :class=> "pdf-link",:title=>"Export to PDF",:style=>"float:right;width:25px;height:25px;margin-top:-30px;")  %>
+<% end %>
+
+</div> 
+   
+<div id="advanceform" style="display:none">
+ <%= search_form_for @q,:url => search_reports_path,:html => {class: 'form-horizontal '}  do |f| %>
+  <fieldset>
+  <legend>Search Reports</legend>
+ </br>
+ <table >
+ <tr>
+ 	<td>
+   <div class="control-group">  
+    <%= f.label :report_name_cont, "Report Name", class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :report_name_cont%>
+    </div>
+  </div>
+	</td> 
+	<td>
+   <div class="control-group">
+    <%= f.label :category_cont, "Category", class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :category_cont%>
+    </div>
+    </td>
+   </tr>
+
+ <tr>
+ 	<td>
+   
+  </div>
+   <div class="control-group">
+    <%= f.label :department_cont, "Department", class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :department_cont%>
+    </div>
+  </div>
+	</td>
+	<td> 
+   <div class="control-group">
+    <%= f.label :system_cont, "System", class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :system_cont%>
+    </div>
+  </div>
+	</td>
+	</tr>
+
+ <tr>
+ 	<td>
+	
+   <div class="control-group">
+    <%= f.label :owner_cont, "Owner", class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :owner_cont%>
+    </div>
+  </div>
+	</td>
+	<td>
+<div class="control-group">
+    <%= f.label :last_updated_cont, "Last Updated", class: 'control-label' %>
+    <div class="controls">
+      <% if q.last_updated.blank? %>
+    <%= f.text_field :last_updated_cont, include_blank: true, default: nil, :id => 'datepicker'%> 
+      <% elsif !q.last_updated_cont.blank? %>
+      <%= f.text_field :last_updated_cont, :value => "#{change_date_format_for_edit_page(q.last_updated_cont)}", :id => 'datepicker' %> 
+      <% end %>
+      
+    </div>
+</div>
+	</td>
+	</tr>
+	
+ <tr>
+ 	<td>
+   <div class="control-group">  
+    <%= f.label :module_cont, "Module", class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :module_cont%>
+    </div>
+  </div>
+	</td> 
+	<td>
+   <div class="control-group">
+    <%= f.label :frequency_cont, "Frequency", class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :frequency_cont%>
+    </div>
+    </td>
+   </tr>
+
+ <tr>
+ <tr>
+ 	<td>
+   <div class="control-group">  
+    <%= f.label :status_cont, "Status", class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :status_cont%>
+    </div>
+  </div>
+	</td> 
+	<td>
+   <div class="control-group">
+    <%= f.label :usage_cont, "Usage", class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :usage_cont%>
+    </div>
+    </td>
+   </tr>
+
+ <tr>	
+</table>
+  <div class="form-actions">
+    <%= f.submit class: 'btn btn-success' %>
+    <input type="reset" class='btn'></input>
+    <a href="#" id="advance-search">Simple</a>
+  </div>  
+  </fieldset>
+  <% end %>
+</div>
+
+
+

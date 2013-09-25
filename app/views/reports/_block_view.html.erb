@@ -1,0 +1,182 @@
+<%= render :partial => "bootstrap-multiselect" %>		
+<%= render :partial => "bootstrapmultiselectjs" %>		
+
+<style>
+ .hovr:hover{
+ opacity:0.4
+}
+.mai1{
+
+text-align: center;
+position: relative;
+margin-top:19px;
+height:218px;
+padding-top:14px;
+margin-right:10px;
+border: solid 1px black;
+box-shadow: 1px 1px 4px -1px black;
+border-radius: 15px 13px 12px 15px;
+width:176px;
+}
+.hovr{
+	text-align: center;
+	cursor:pointer;
+      
+}
+a:hover {
+	
+}
+
+.preparing{
+	cursor:pointer;
+	
+}
+.db_nam{
+color:black;
+
+}
+.pre{
+float:right;
+padding-right:50px;
+margin-top:-25px;
+}
+</style>
+			<script type="text/javascript">
+			    $(document).ready(function() {
+			    
+		/*	    $(".test").click(function(){
+			    
+			    	opts=$( "#example3").val()
+			    	if (!opts)
+			    	{
+			    		alert("Please Select Atleast One Option")
+			    		return false
+			    	}
+			    	else
+			    	{
+			    		$('#sform').submit();
+			    	    	alert(opts);
+			    	}
+			    
+			    });*/
+			    
+			        $('#example3').multiselect({
+			        	includeSelectAllOption: true
+			        });
+			        
+			        $('.cat').click(function() { 
+			        	$('.cat').removeClass("active")
+			        	$(this).addClass("active")
+			        	idval = $(this).attr('id')
+			        	opts=$( "#example3").val()
+			        	/*if (!opts)  
+					{						
+						alert("Please Select Atleast One Option")
+				        	$('.cat').removeClass("active")
+						return false;
+					}*/
+			        	//alert(idval)
+			        	
+	        	$.ajax({
+			    	    	url: '/listview_report',
+			    	    	//crossDomain:true,
+					data: {id: idval, options: opts },
+			        	success: function(data) {
+			        		//alert("success")
+			        		$('#blockview').html(data)
+			        	},
+			        	error: function() {
+			        	
+			        		alert('error occurred')
+			        	}
+			        	});
+			        	
+			        });
+			    });
+			</script>   
+		          <% i = 0 %>  
+  
+<!-- image block --> 
+<div style="margin-top:-20px;"> <!-- main  div start  -->
+
+<div style="float:left;" > <!-- left  div start  -->
+
+<!--- for apps list -->
+
+<%#= form_for :report,:url => url_for(:action=>'show',:controller=>'reports'), :html => {:id=>"sform", class: 'form-horizontal'}  do |f| %>
+	
+<div class="span2 categories well" style="margin-top:20px;padding:6px;margin-left: 0px;">
+
+
+  						<select id="example3" class="sel" name="options[]" multiple="multiple">
+							<option value="module" >Module</option>
+							<option value="category">Category</option>
+							<option value="system">System</option>
+							<option value="owner">Owner</option>
+							<option value="frequency">Frequency</option>
+							<option value="status">Status</option>
+		                                        <option value="usage">Usage</option>							
+						</select>
+<%#end%> <!-- form ending-->
+
+      <ul class="nav nav-list left_blk" style="height:200px;">
+        <li class="nav-header" style="color:#333;background:whiteSmoke;line-height:27px;padding-left:50px;">Apps</li>
+      <% if @reports %>
+       <li id ="all" class=" cat active"><%= link_to "All Reports", 'javaScript:void(0)' %></li>
+
+        <% @reports.each do |app| %>
+         <li class="cat" id =<%= app.id %>> <%= link_to app.report_name, 'javaScript:void(0)' %></li>
+        <% end %>
+      <% end %> 
+      </ul>
+
+    </div>
+</div> <!-- left  div end   -->
+
+   <div id='blockview' style="float:right;width:780px;margin-right: -15px;"><!-- right  div start  -->
+     <% if @reports.blank? %>
+        <div class="well" style="margin-top:20px;margin-left:10px;">
+          No reports found
+        </div>
+      <% else %>
+        <table class="">
+        <% @reports.each do |report| %>
+          <% if i % 4 == 0 %>
+          <tr style="height:230px">
+          <% end %>
+	  <td style="height:200px;width:200px;  word-wrap: break-word; "> <a  class="test" href="<%= report_path(report, :block_view => 'a') %> ">
+		 		<div class="mai1" >
+
+<div class="hovr">
+	<p class="">
+	 <% if report.report_attachments[0].nil? %>
+		<img src="../assets/reports.png"/>
+       <%else%>
+       		<%= image_tag report.report_attachments[0].image_attachment.url(:thumb) %>
+</a>  
+       <%end%>
+
+<span class="db_nam"><b><%=report.report_name%></b></span>
+</p>
+</div>
+</div>
+</a>
+<br/><br/>
+
+			</td>
+                  <% if i % 4 == 3 %>
+          </tr>
+          <% end %>
+          <% i = i + 1 %>
+        <% end %> 
+        </table>  
+ <% end %> 
+
+<!-- image block ##############################################################-->
+</div> <!-- right div end -->
+
+
+</div><!-- main  div end   -->
+
+
+

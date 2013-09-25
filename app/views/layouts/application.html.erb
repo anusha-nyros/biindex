@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <style type="text/css">
+ 
+ .logo
+ {
+ 	width:58px !important;
+ }
+
+.ftspans span{
+    clear:both;
+    padding-bottom:4px;
+    padding-right:4px;
+  }
+	#footer {
+		position:absolute;
+		bottom:0;
+		width:100%;
+		height:40px;			/* Height of the footer */
+		background:#000;
+    color:#fff;
+	}
+	
+	</style> 
+      <style type="text/css">
+  
+	
+ 	 html,body {
+            height: 100%;
+        }
+        footer {
+            color: #fff;
+            background: #222;
+            padding: 5px;
+            border-top: 1px solid #000;
+            font-size:12px;
+        }
+        
+        .wrapper {
+            min-height: 100%;
+            height: auto !important;
+            height: 100%;
+            margin: 0px auto 10px;
+        }
+        .push {
+            height: 63px;
+        }
+        .wrapper > .container {
+            padding-top: 10px;
+        }
+   	.contact a:hover{
+	text-decoration :none;
+	}
+  </style>
+	<!--[if lt IE 7]>
+	<style media="screen" type="text/css">
+	#container {
+		height:100%;
+	}
+	</style>
+	<![endif]-->
+  <title>BI INDEX</title>
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag  "jquery_ujs.js"%>
+  <%= csrf_meta_tags %>
+ <link rel="icon" type="image/png" href="/assets/favicon.png" />
+</head>
+<body>
+ <div class="wrapper">
+  <div class="navbar ">
+    <div class="navbar-inner ">
+      <div class="container ">
+<div style = "width:770px">
+        <div class="span4" style="float: left;margin-top:2px; width: 20%;font-family: Arial;font-size: 40px;color: white;margin-bottom:10px">
+              <a href=" javaScript:void(0)" style="text-decoration:none;" ><%= image_tag('cpp_logo_white.png', :class => 'logo') %> </a> 
+     
+<!-- <a href="/patterns" style="text-decoration:none;">  <img src="/assets/home_page/iaptoolkit.png" class="img-logo" /> -->
+        </div>
+<div style="float:left;">
+<ul class ="">
+<% if current_user %>   
+ <li class="nav pull-left" style="margin-top:16px;margin-bottom:-30px;color:white"> <%= link_to "Home", reports_url,:style =>"color:white;text-decoration:none" %></li>
+<% end %>
+</ul>
+</div>
+</div>
+ 	<ul class="nav pull-right">
+          <% if current_user %>            
+            <li ><%#= link_to "Logout", logout_url %></li>
+
+              </ul>
+            </li>
+          <% else %>
+            <li><%= link_to "Login", login_url %></li>
+          <% end %>
+        </ul>
+        <ul class="nav pull-right" style="width:727px;margin-top:-8px"> 
+          <% if current_user %>
+            <!-- Admin menu here -->
+<li class="nav pull-left"> <%#= link_to "Home", reports_url %></li>
+     <li class="nav pull-right"><%= link_to "Logout", logout_url%></li>
+            <li class="<%= menu_active('reports') %>"><%= link_to "Reports", reports_url %></li>
+          <% end %>
+          <% if current_user && current_user.admin?%>
+            <!-- User menu here -->
+            <li class="<%= menu_active('admin/users') %>"><%= link_to "Users", admin_users_url %></li>
+          <% end %>
+          
+        </ul>
+ 
+      </div>
+    </div>
+  </div>  
+  <div class="container">
+    
+            <div id="notifications">
+            <% [:error, :notice, :alert].each do |type| %>
+              <% if flash[type] %>
+                <%= content_tag :div, class: "alert #{alert_class(type)}" do %>
+                <a class="close" data-dismiss="alert">x</a>
+                <%= flash[type] %>
+                <% end %>
+              <% end %>
+            <% end %>
+            </div>
+
+            <% if current_user %>
+              <% if controller.controller_path != 'pages'%> 
+                <ul class="breadcrumb">
+                <% url = request.path.split('?') %>
+                 <% if url == ["/admin/categories"] %>
+                  Categories
+                <% elsif url == ["/admin"] %>
+                  Categories
+                 <% elsif controller.controller_name == "hostings" %>
+                   Instances
+                 <% else %>
+               <%= raw breadcrumb  %>
+                <% end %>
+              </ul>
+              <% end %>
+            <% end %>
+    
+    <div class="row">
+      <div class="span12">
+        <%= yield %>
+      </div>
+    </div>
+ </div>
+
+
+</div>
+  
+
+
+
+<footer> 
+<div class="container">
+		<!-- Footer start -->
+    <p style="float:left" class="ftspans"><span>Copyright&nbsp;&copy;&nbsp;BI INDEX</span>    </p>
+    <p style="float:right" class="ftspans">     
+      <span><%#= link_to "Contact Us", "/contact_us" ,:style=>"color:white;" %></span>
+      <span><%#= link_to "Privacy", "/privacy" ,:style=>"color:white;" %></span>
+      <span><%#= link_to "Legal", "/legal" ,:style=>"color:white;" %>&nbsp;&nbsp;&nbsp;</span>   
+    </p>
+		<!-- Footer end -->
+	</div>
+</footer> 
+
+</body>
+</html>

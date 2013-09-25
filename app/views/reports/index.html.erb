@@ -1,0 +1,53 @@
+<div style= "float:right; margin-top:5px">
+<p id="toggle">
+    <a class="  icon-th-list" style="cursor:pointer;" title=" List View " > </a>
+    &nbsp;&nbsp;
+    <a class=" icon-th-large" style="cursor:pointer;" title="Block View "> </a>
+    &nbsp;&nbsp;
+    <a class=" icon-th" style="cursor:pointer;" title="Catalog View "> </a>
+
+</p>
+  </div>
+
+<%= render :partial => "menu" %>
+<%= render :partial => "search_form", locals: {q: @q} %>
+ 
+<div style="display:block;" id='block_view'>
+<% if @reports.blank? %>
+
+  <div class="well">You don't currently have any Reports </div>
+
+<% else %>
+  
+  <%= render 'block_view' %> 
+
+<%end%>
+</div> 
+ <!--Viewing report in list view -->
+<div style="display:none;" id='list_view'>
+ 
+<% if @reports.blank? %>
+  <div class="well">You don't currently have any Reports </div>
+<% else %>
+	<%= render 'result' %>
+<% end %>
+</div>   
+ <!--Viewing report in catalog view -->
+<div style="display:none;" id='catalog_view'>
+<% if @reports.blank? %> 
+  <div class="well">You don't currently have any Reports </div>
+<% else %>
+  <%= render 'catalog_view' %>
+<%end%> 
+</div> 
+     <script>
+        $(function() {        
+$('#toggle > a').click(function() {
+    var ix = $(this).index();
+
+    $('#list_view').toggle( ix === 0);
+    $('#block_view').toggle( ix === 1 );
+    $('#catalog_view').toggle( ix ===  2 );    
+});  
+        });
+</script> 
